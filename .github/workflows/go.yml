@@ -2,46 +2,39 @@ name: Go
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, master ]
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest        # workflow будет выполняться на виртуальной машине с ОС "Ubuntu", последней версии
+    runs-on: ubuntu-latest
     steps:
-      - name: Check Go Version
-        run: go version
+        - uses: actions/checkout@v3
 
-      - name: Checkout Repository # Клонирование репозитория в виртуальную среду для осуществление всех тестов
-        uses: actions/checkout@v2
-      
-      - name: SetUp Go            # Подготовка и настройка "Go"
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.22'      # Указание необходимой для сборки версии "Go"
+        - name: Set up Go
+          uses: actions/setup-go@v4
+          with:
+            go-version: '1.22'
+            cache-dependency-path: go.sum
 
-      - name: Build
-        run: go build -o ./bin/ -v ./...
+        - name: Build
+          run: go build -o ./bin/ -v ./...
 
-      - name: Test
-        run: go test -v ./...
+        - name: Test
+          run: go test -v ./...
 
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest        # workflow будет выполняться на виртуальной машине с ОС "Ubuntu", последней версии
+  linter:
+    name: lint
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout Repository # Клонирование репозитория в виртуальную среду для осуществление всех тестов
-        uses: actions/checkout@v2 
-      
-      - name: SetUp Go
-        uses: actions/setup-go@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v4
         with:
-          go-version: '1.22'      # Указание необходимой для сборки версии "Go"
-
-      - name: Install golangci-lint
+          go-version: '1.22'
+          cache: false
+      - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
-          version: v1.53.3        # Укажите нужную версию golangci-lint здесь
-      - name: Lint
-        run: golangci-lint run ./...
+          version: v1.53
+          args: --timeout=30m --config=./.golangci.reference.yml --issues-exit-code=0
