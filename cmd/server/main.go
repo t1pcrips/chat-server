@@ -52,10 +52,10 @@ func main() {
 	reflection.RegisterV1(s)
 	desc.RegisterChatServer(s, &server{})
 
-	log.Print(fmt.Sprintf(color.HiMagentaString("server listening on port - %v", grpcPort)))
+	log.Print(fmt.Sprintf(color.HiMagentaString("server listening at - %v", listen.Addr())))
 
 	if err := s.Serve(listen); err != nil {
-		log.Fatalf(color.RedString("failed to serve - %v\n", err))
+		log.Fatalf(fmt.Sprintf(color.RedString("failed to serve - %v", err)))
 
 	}
 }

@@ -22,7 +22,7 @@ func main() {
 	defer conn.Close()
 
 	if err != nil {
-		log.Fatal(fmt.Sprintf(color.RedString("failed to connected to server - %d, error - %v", addres, err)))
+		log.Fatal(fmt.Sprintf(color.RedString("failed to connected to server - %d", addres)))
 	}
 
 	c := desc.NewChatClient(conn)
@@ -36,9 +36,12 @@ func main() {
 			gofakeit.Name(), gofakeit.Name(), gofakeit.Name(), gofakeit.Name(),
 		},
 	})
+
 	if err != nil {
-		log.Fatalf(fmt.Sprintf(color.RedString("failed to create Request error - %v\n", err)))
+		log.Fatalf(fmt.Sprintf(color.RedString("failed to create Request error - %v", err)))
+	} else {
+		log.Print(fmt.Sprintf(color.HiMagentaString("Request Created!")))
 	}
 
-	log.Printf(color.RedString("Note Info:\n") + color.GreenString("%+v", r.GetId()))
+	log.Printf(fmt.Sprintf(color.RedString("Note Info:\n") + color.GreenString("%+v", r.GetId())))
 }
