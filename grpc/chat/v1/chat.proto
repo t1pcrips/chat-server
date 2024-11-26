@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "../../../pkg/chat_v1;chat_v1";
 
-service chat {
+service Chat {
   rpc Create(CreateRequest) returns (CreateResponse);
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
   rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty);
