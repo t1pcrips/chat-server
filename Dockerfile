@@ -9,6 +9,6 @@ RUN go build -o ./bin/chat_server cmd/server/main.go
 FROM alpine:latest
 
 WORKDIR /root/
-COPY --from=builder /github.com/t1pcrips/chat-server/source/bin/crud_server .
+COPY --from=builder /github.com/t1pcrips/chat-server/source/bin/chat_server .
 
 CMD ["./chat_server"]
