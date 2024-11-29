@@ -1,46 +1,72 @@
 package main
 
 import (
+	"chat-server/internal/config"
+	"chat-server/internal/config/env"
+	"chat-server/internal/database"
+	"chat-server/internal/repository/chat"
+	"chat-server/internal/service"
 	deps "chat-server/pkg/chat_v1"
 	"context"
+	"flag"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
-	"google.golang.org/protobuf/types/known/emptypb"
 	"log"
-	"math/rand"
 	"net"
 )
 
-type server struct {
-	deps.UnimplementedChatServer
-}
+var configPath string
 
-func (s *server) Create(ctx context.Context, req *deps.CreateRequest) (*deps.CreateResponse, error) {
-	log.Println("create: ", req.Usernames)
-	return &deps.CreateResponse{
-		Id: rand.Int63() % 100,
-	}, nil
-}
-
-func (s *server) Delete(ctx context.Context, req *deps.DeleteRequest) (*emptypb.Empty, error) {
-	log.Println("delete: ", req.Id)
-	return &emptypb.Empty{}, nil
-}
-
-func (s *server) SendMessage(ctx context.Context, req *deps.SendMessageRequest) (*emptypb.Empty, error) {
-	log.Println("send: ", req.Text)
-	return &emptypb.Empty{}, nil
+func init() {
+	flag.StringVar(&configPath, "config", ".env", "path to config file")
+	flag.Parse()
 }
 
 func main() {
-	lis, err := net.Listen("tcp", ":50052")
+	err := config.Load(configPath)
+	if err != nil {
+		log.Println(err.Error())
+	}
+
+	pgConfig, err := env.NewPgConfigSearcher().Get()
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 
-	s := grpc.NewServer()
-	reflection.Register(s)
-	deps.RegisterChatServer(s, &server{})
+	loggerConfig, err := env.NewLogConfigSearcher().Get()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 
-	log.Fatal(s.Serve(lis))
+	logger := loggerConfig.SetUp()
+
+	grpcConfig, err := env.NewGRPCConfigSearcher().Get()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	ctx := context.Background()
+
+	pool, closer, err := database.InitPostgresConnection(ctx, pgConfig)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	defer closer()
+
+	repository := chat.NewChatRepository(pool, logger)
+	chatService := service.NewChatService(repository, logger)
+
+	lis, err := net.Listen("tcp", grpcConfig.Address())
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	server := grpc.NewServer()
+
+	reflection.Register(server)
+	deps.RegisterChatServer(server, chatService)
+
+	log.Println("server starts...")
+	log.Fatal(server.Serve(lis))
 }

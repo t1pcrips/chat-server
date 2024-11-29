@@ -14,8 +14,6 @@ env:
 jobs:
   image-build-and-push:
     runs-on: ubuntu-latest
-    needs: lint
-
     steps:
       - name: Checkout master
         uses: actions/checkout@v3
@@ -58,6 +56,7 @@ jobs:
 
   build-and-test:
     runs-on: ubuntu-latest
+    needs: lint
     steps:
       - name: Check Go Version
         run: go version
@@ -79,7 +78,6 @@ jobs:
   lint:
     name: lint
     runs-on: ubuntu-latest
-    needs: build-and-test
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
