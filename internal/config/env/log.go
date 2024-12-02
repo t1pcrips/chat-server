@@ -8,10 +8,10 @@ import (
 	"strconv"
 )
 
-type LogConfigSearcher struct{}
+type LogCfSearcher struct{}
 
-func NewLogConfigSearcher() *LogConfigSearcher {
-	return &LogConfigSearcher{}
+func NewLogCfgSearcher() *LogCfSearcher {
+	return &LogCfSearcher{}
 }
 
 const (
@@ -19,7 +19,7 @@ const (
 	logTimeFormat = "LOG_TIME_FORMAT"
 )
 
-func (s *LogConfigSearcher) Get() (*config.LogConfig, error) {
+func (s *LogCfSearcher) Get() (*config.LogConfig, error) {
 	levelStr := os.Getenv(logLevel)
 	if levelStr == "" {
 		return nil, fmt.Errorf("logLevel not found")

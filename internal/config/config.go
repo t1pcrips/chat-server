@@ -8,6 +8,18 @@ import (
 	"os"
 )
 
+type PgConfigSearcher interface {
+	Get() (*PgConfig, error)
+}
+
+type GRPCConfigSearcher interface {
+	Get() (*GRPCConfig, error)
+}
+
+type LogConfigSearcher interface {
+	Get() (*LogConfig, error)
+}
+
 type PgConfig struct {
 	Port     int
 	Host     string
@@ -24,6 +36,10 @@ type GRPCConfig struct {
 type LogConfig struct {
 	LogLevel      zerolog.Level
 	LogTimeFormat string
+}
+
+func (cfg *PgConfig) DSN() string {
+	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s", cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.Name)
 }
 
 func (cfg *GRPCConfig) Address() string {

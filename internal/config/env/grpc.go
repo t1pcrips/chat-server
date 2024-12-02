@@ -11,13 +11,13 @@ const (
 	hostGRPC = "GRPC_HOST"
 )
 
-type GRPCConfigSearcher struct{}
+type GRPCCfgSearcher struct{}
 
-func NewGRPCConfigSearcher() *GRPCConfigSearcher {
-	return &GRPCConfigSearcher{}
+func NewGRPCCfgSearcher() *GRPCCfgSearcher {
+	return &GRPCCfgSearcher{}
 }
 
-func (s *GRPCConfigSearcher) Get() (*config.GRPCConfig, error) {
+func (s *GRPCCfgSearcher) Get() (*config.GRPCConfig, error) {
 	host := os.Getenv(hostGRPC)
 	if host == "" {
 		return nil, fmt.Errorf("gRPC Host not found")

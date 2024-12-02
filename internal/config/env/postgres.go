@@ -15,13 +15,13 @@ const (
 	password = "POSTGRES_PASSWORD"
 )
 
-type PgConfigSearcher struct{}
+type PgCfgSearcher struct{}
 
-func NewPgConfigSearcher() *PgConfigSearcher {
-	return &PgConfigSearcher{}
+func NewPgCfgSearcher() *PgCfgSearcher {
+	return &PgCfgSearcher{}
 }
 
-func (s *PgConfigSearcher) Get() (*config.PgConfig, error) {
+func (s *PgCfgSearcher) Get() (*config.PgConfig, error) {
 	dbHost := os.Getenv(hostPg)
 	if dbHost == "" {
 		return nil, fmt.Errorf("dbHost not found")
