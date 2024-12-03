@@ -6,7 +6,7 @@ import (
 	"context"
 )
 
-func (s *ChatServiceImpl) Create(ctx context.Context, usernames []model.User) (int64, error) {
+func (s *ChatServiceImpl) Create(ctx context.Context, info *model.CreateChatRequest) (int64, error) {
 	var chatId int64
 
 	err := s.txManeger.ReadCommitted(ctx, func(ctx context.Context) error {
@@ -19,7 +19,7 @@ func (s *ChatServiceImpl) Create(ctx context.Context, usernames []model.User) (i
 
 		txErr = s.memberRepository.CreateMember(ctx, &model.CreateMemberRequest{
 			ChatId:    chatId,
-			Usernames: usernames,
+			Usernames: info.Usernames,
 		})
 		if txErr != nil {
 			return errs.ErrCreateMember
