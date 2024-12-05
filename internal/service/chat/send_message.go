@@ -1,10 +1,10 @@
 package chat
 
 import (
-	"chat-server/internal/model"
-	"chat-server/pkg/errs"
 	"context"
 	"fmt"
+	"github.com/t1pcrips/chat-service/internal/model"
+	"github.com/t1pcrips/chat-service/pkg/errs"
 )
 
 func (s *ChatServiceImpl) SendMessage(ctx context.Context, info *model.CreateMessageRequest) error {

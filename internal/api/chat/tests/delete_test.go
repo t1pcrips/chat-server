@@ -1,14 +1,15 @@
 package tests
 
 import (
-	"chat-server/internal/api/chat"
-	"chat-server/internal/service"
-	"chat-server/internal/service/mocks"
-	desc "chat-server/pkg/chat_v1"
-	"chat-server/pkg/errs"
 	"context"
 	"github.com/gojuno/minimock/v3"
 	"github.com/stretchr/testify/require"
+	"github.com/t1pcrips/chat-service/internal/api/chat"
+	"github.com/t1pcrips/chat-service/internal/service"
+	"github.com/t1pcrips/chat-service/internal/service/mocks"
+	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
+	"github.com/t1pcrips/chat-service/pkg/errs"
+	"github.com/t1pcrips/chat-service/pkg/helpers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -43,7 +44,7 @@ func TestDelete(t *testing.T) {
 		chatServiceMock chatServiceMockFunc
 	}{
 		{
-			name: successDelete,
+			name: helpers.SuccessDelete,
 			args: args{
 				ctx: ctx,
 				req: req,
@@ -57,7 +58,7 @@ func TestDelete(t *testing.T) {
 			},
 		},
 		{
-			name: failedDelete,
+			name: helpers.FailedDelete,
 			args: args{
 				ctx: ctx,
 				req: req,

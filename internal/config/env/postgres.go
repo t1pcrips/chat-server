@@ -1,8 +1,8 @@
 package env
 
 import (
-	"chat-server/internal/config"
 	"fmt"
+	"github.com/t1pcrips/chat-service/internal/config"
 	"os"
 	"strconv"
 )

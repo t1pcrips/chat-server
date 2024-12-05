@@ -11,7 +11,11 @@ type CreateMessageRequest struct {
 
 type CreateMemberRequest struct {
 	ChatId    int64
-	Usernames []User
+	Usernames []string
+}
+
+type CreateChatRequest struct {
+	Usernames []string
 }
 
 type User struct {

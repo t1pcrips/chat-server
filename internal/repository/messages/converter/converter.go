@@ -1,8 +1,8 @@
 package converter
 
 import (
-	"chat-server/internal/model"
-	"chat-server/internal/repository/messages/message_model"
+	"github.com/t1pcrips/chat-service/internal/model"
+	"github.com/t1pcrips/chat-service/internal/repository/messages/message_model"
 )
 
 func ToMessageFromMessageService(message *model.CreateMessageRequest) *message_model.CreateMessageRequest {

@@ -1,10 +1,10 @@
 package chat_members
 
 import (
-	"chat-server/internal/client/database"
-	"chat-server/pkg/errs"
 	"context"
 	"github.com/Masterminds/squirrel"
+	"github.com/t1pcrips/chat-service/pkg/errs"
+	"github.com/t1pcrips/platform-pkg/pkg/database"
 )
 
 func (repo *MembersRepositoryImpl) CheckMemberExists(ctx context.Context, userName string) (bool, error) {

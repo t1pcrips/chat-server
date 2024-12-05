@@ -1,8 +1,8 @@
 package chat_members
 
 import (
-	"chat-server/internal/client/database"
-	"chat-server/internal/repository"
+	"github.com/t1pcrips/chat-service/internal/repository"
+	"github.com/t1pcrips/platform-pkg/pkg/database"
 )
 
 const (

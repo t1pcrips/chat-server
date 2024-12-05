@@ -1,8 +1,8 @@
 package chat
 
 import (
-	"chat-server/internal/service"
-	desc "chat-server/pkg/chat_v1"
+	"github.com/t1pcrips/chat-service/internal/service"
+	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
 )
 
 type ChatApiImpl struct {

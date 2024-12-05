@@ -2,4 +2,5 @@
 bin/
 local.env
 prod.env
-todo.md
+todo.md/coverage.out
+/coverage.out

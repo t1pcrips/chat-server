@@ -1,9 +1,9 @@
 package main
 
 import (
-	"chat-server/internal/app"
 	"context"
 	"flag"
+	"github.com/t1pcrips/chat-service/internal/app"
 	"log"
 )
 

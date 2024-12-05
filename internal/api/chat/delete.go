@@ -1,8 +1,8 @@
 package chat
 
 import (
-	desc "chat-server/pkg/chat_v1"
 	"context"
+	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"

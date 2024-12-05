@@ -1,10 +1,11 @@
 package app
 
 import (
-	"chat-server/internal/closer"
-	"chat-server/internal/config"
-	dst "chat-server/pkg/chat_v1"
 	"context"
+	"github.com/t1pcrips/chat-service/internal/config"
+	"github.com/t1pcrips/chat-service/internal/interceptor"
+	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
+	"github.com/t1pcrips/platform-pkg/pkg/closer"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/reflection"
@@ -64,9 +65,12 @@ func (a *App) initConfig(ctx context.Context) error {
 }
 
 func (a *App) initGRPCServer(ctx context.Context) error {
-	a.grpcServer = grpc.NewServer(grpc.Creds(insecure.NewCredentials()))
+	a.grpcServer = grpc.NewServer(
+		grpc.Creds(insecure.NewCredentials()),
+		grpc.UnaryInterceptor(interceptor.ValidateInterceptor),
+	)
 	reflection.Register(a.grpcServer)
-	dst.RegisterChatServer(a.grpcServer, a.serviceProvider.ChatImpl(ctx))
+	desc.RegisterChatServer(a.grpcServer, a.serviceProvider.ChatImpl(ctx))
 
 	return nil
 }

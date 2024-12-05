@@ -1,9 +1,9 @@
 package chat
 
 import (
-	"chat-server/internal/client/database"
-	"chat-server/internal/repository"
-	"chat-server/internal/service"
+	"github.com/t1pcrips/chat-service/internal/repository"
+	"github.com/t1pcrips/chat-service/internal/service"
+	"github.com/t1pcrips/platform-pkg/pkg/database"
 )
 
 type ChatServiceImpl struct {

@@ -1,15 +1,16 @@
 package tests
 
 import (
-	"chat-server/internal/api/chat"
-	"chat-server/internal/model"
-	"chat-server/internal/service"
-	"chat-server/internal/service/mocks"
-	desc "chat-server/pkg/chat_v1"
-	"chat-server/pkg/errs"
 	"context"
 	"github.com/gojuno/minimock/v3"
 	"github.com/stretchr/testify/require"
+	"github.com/t1pcrips/chat-service/internal/api/chat"
+	"github.com/t1pcrips/chat-service/internal/model"
+	"github.com/t1pcrips/chat-service/internal/service"
+	"github.com/t1pcrips/chat-service/internal/service/mocks"
+	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
+	"github.com/t1pcrips/chat-service/pkg/helpers"
+	"github.com/t1pcrips/platform-pkg/pkg/errs"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -59,7 +60,7 @@ func TestSendMessage(t *testing.T) {
 		chatServiceMock chatServiceMockFunc
 	}{
 		{
-			name: successSend,
+			name: helpers.SuccessSend,
 			args: args{
 				ctx: ctx,
 				req: req,
@@ -73,7 +74,7 @@ func TestSendMessage(t *testing.T) {
 			},
 		},
 		{
-			name: failedSend,
+			name: helpers.FailedSend,
 			args: args{
 				ctx: ctx,
 				req: req,

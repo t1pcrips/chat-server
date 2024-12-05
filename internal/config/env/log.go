@@ -1,9 +1,9 @@
 package env
 
 import (
-	"chat-server/internal/config"
 	"fmt"
 	"github.com/rs/zerolog"
+	"github.com/t1pcrips/chat-service/internal/config"
 	"os"
 	"strconv"
 )

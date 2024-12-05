@@ -1,10 +1,10 @@
 package chat
 
 import (
-	"chat-server/internal/client/database"
-	"chat-server/pkg/errs"
 	"context"
 	"github.com/Masterminds/squirrel"
+	"github.com/t1pcrips/chat-service/pkg/errs"
+	"github.com/t1pcrips/platform-pkg/pkg/database"
 )
 
 func (repo *ChatRepositoryImpl) DeleteChat(ctx context.Context, chatId int64) error {

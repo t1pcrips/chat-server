@@ -1,19 +1,21 @@
 package converter
 
 import (
-	"chat-server/internal/model"
-	dst "chat-server/pkg/chat_v1"
+	"github.com/t1pcrips/chat-service/internal/model"
+	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
 )
 
-func ConvertUsernamesToUsers(usernames []string) []model.User {
-	users := make([]model.User, len(usernames))
+func ConvertToCreateRequestFromDesc(usernames []string) *model.CreateChatRequest {
+	users := make([]string, len(usernames))
 	for i, username := range usernames {
-		users[i] = model.User{Username: username}
+		users[i] = username
 	}
-	return users
+	return &model.CreateChatRequest{
+		Usernames: usernames,
+	}
 }
 
-func ToMessageFromDeps(req *dst.SendMessageRequest) *model.CreateMessageRequest {
+func ToMessageFromDeps(req *desc.SendMessageRequest) *model.CreateMessageRequest {
 	return &model.CreateMessageRequest{
 		ChatId:    req.GetToChatId(),
 		From:      req.GetFrom(),

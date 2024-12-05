@@ -1,8 +1,8 @@
 package chat
 
 import (
-	"chat-server/pkg/errs"
 	"context"
+	"github.com/t1pcrips/chat-service/pkg/errs"
 )
 
 func (s *ChatServiceImpl) Delete(ctx context.Context, chatId int64) error {

@@ -1,20 +1,20 @@
 package app
 
 import (
-	"chat-server/internal/api/chat"
-	"chat-server/internal/client/database"
-	"chat-server/internal/client/database/postgres"
-	"chat-server/internal/client/database/transaction"
-	"chat-server/internal/closer"
-	"chat-server/internal/config"
-	"chat-server/internal/config/env"
-	"chat-server/internal/repository"
-	chatRepository "chat-server/internal/repository/chat"
-	"chat-server/internal/repository/chat_members"
-	"chat-server/internal/repository/messages"
-	"chat-server/internal/service"
-	chatService "chat-server/internal/service/chat"
 	"context"
+	"github.com/t1pcrips/chat-service/internal/api/chat"
+	"github.com/t1pcrips/chat-service/internal/config"
+	"github.com/t1pcrips/chat-service/internal/config/env"
+	"github.com/t1pcrips/chat-service/internal/repository"
+	chatRepository "github.com/t1pcrips/chat-service/internal/repository/chat"
+	"github.com/t1pcrips/chat-service/internal/repository/chat_members"
+	"github.com/t1pcrips/chat-service/internal/repository/messages"
+	"github.com/t1pcrips/chat-service/internal/service"
+	chatService "github.com/t1pcrips/chat-service/internal/service/chat"
+	"github.com/t1pcrips/platform-pkg/pkg/closer"
+	"github.com/t1pcrips/platform-pkg/pkg/database"
+	"github.com/t1pcrips/platform-pkg/pkg/database/postgres"
+	"github.com/t1pcrips/platform-pkg/pkg/database/transaction"
 	"log"
 )
 

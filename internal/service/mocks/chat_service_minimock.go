@@ -5,7 +5,7 @@ package mocks
 //go:generate minimock -i chat-server/internal/service.ChatService -o chat_service_minimock.go -n ChatServiceMock -p mocks
 
 import (
-	"chat-server/internal/model"
+	"github.com/t1pcrips/chat-service/internal/model"
 	"context"
 	"sync"
 	mm_atomic "sync/atomic"

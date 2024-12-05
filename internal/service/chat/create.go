@@ -1,8 +1,9 @@
 package chat
 
 import (
-	"chat-server/internal/model"
-	"chat-server/pkg/errs"
+	"github.com/t1pcrips/chat-service/internal/model"
+	"github.com/t1pcrips/chat-service/pkg/errs"
+
 	"context"
 )
 

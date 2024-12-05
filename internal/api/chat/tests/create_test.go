@@ -1,16 +1,16 @@
 package tests
 
 import (
-	"chat-server/internal/api/chat"
-	"chat-server/internal/model"
-	"chat-server/internal/service"
-	"chat-server/internal/service/mocks"
-	desc "chat-server/pkg/chat_v1"
-	"chat-server/pkg/errs"
 	"context"
-	"fmt"
 	"github.com/gojuno/minimock/v3"
 	"github.com/stretchr/testify/require"
+	"github.com/t1pcrips/chat-service/internal/api/chat"
+	"github.com/t1pcrips/chat-service/internal/model"
+	"github.com/t1pcrips/chat-service/internal/service"
+	"github.com/t1pcrips/chat-service/internal/service/mocks"
+	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
+	"github.com/t1pcrips/chat-service/pkg/errs"
+	"github.com/t1pcrips/chat-service/pkg/helpers"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"math/rand/v2"
@@ -30,7 +30,7 @@ func TestCreate(t *testing.T) {
 		mc  = minimock.NewController(t)
 
 		chatId    = rand.Int64()
-		usernames = names(rand.IntN(5))
+		usernames = helpers.Names(rand.IntN(5))
 
 		req = &desc.CreateRequest{
 			Usernames: usernames,
@@ -53,7 +53,7 @@ func TestCreate(t *testing.T) {
 		chatServiceMock chatServiceMockFunc
 	}{
 		{
-			name: "success case",
+			name: helpers.SuccessCreate,
 			args: args{
 				ctx: ctx,
 				req: req,
@@ -67,7 +67,7 @@ func TestCreate(t *testing.T) {
 			},
 		},
 		{
-			name: "service error mock",
+			name: helpers.FailedCreate,
 			args: args{
 				ctx: ctx,
 				req: req,
@@ -90,9 +90,6 @@ func TestCreate(t *testing.T) {
 			api := chat.NewChatApiImpl(chatServiceMock)
 
 			testResponse, err := api.Create(tt.args.ctx, tt.args.req)
-			if err != nil {
-				fmt.Println(tt.err, err)
-			}
 			require.Equal(t, tt.err, err)
 			require.Equal(t, tt.want, testResponse)
 		})

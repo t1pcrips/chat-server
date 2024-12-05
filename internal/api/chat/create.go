@@ -1,9 +1,9 @@
 package chat
 
 import (
-	"chat-server/internal/converter"
-	desc "chat-server/pkg/chat_v1"
 	"context"
+	"github.com/t1pcrips/chat-service/internal/converter"
+	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )

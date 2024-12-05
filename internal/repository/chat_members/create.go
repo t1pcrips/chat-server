@@ -1,12 +1,12 @@
 package chat_members
 
 import (
-	"chat-server/internal/client/database"
-	"chat-server/internal/model"
-	"chat-server/internal/repository/chat_members/converter"
-	"chat-server/pkg/errs"
 	"context"
 	"github.com/Masterminds/squirrel"
+	"github.com/t1pcrips/chat-service/internal/model"
+	"github.com/t1pcrips/chat-service/internal/repository/chat_members/converter"
+	"github.com/t1pcrips/chat-service/pkg/errs"
+	"github.com/t1pcrips/platform-pkg/pkg/database"
 )
 
 func (repo *MembersRepositoryImpl) CreateMember(ctx context.Context, info *model.CreateMemberRequest) error {

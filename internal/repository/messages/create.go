@@ -1,12 +1,12 @@
 package messages
 
 import (
-	"chat-server/internal/client/database"
-	"chat-server/internal/model"
-	"chat-server/internal/repository/messages/converter"
-	"chat-server/pkg/errs"
 	"context"
 	"github.com/Masterminds/squirrel"
+	"github.com/t1pcrips/chat-service/internal/model"
+	"github.com/t1pcrips/chat-service/internal/repository/messages/converter"
+	"github.com/t1pcrips/chat-service/pkg/errs"
+	"github.com/t1pcrips/platform-pkg/pkg/database"
 )
 
 func (repo *MessagesRepositoryImpl) CreateMessage(ctx context.Context, info *model.CreateMessageRequest) error {
