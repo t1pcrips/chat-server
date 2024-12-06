@@ -57,8 +57,23 @@ func (m *CreateRequest) validate(all bool) error {
 
 	var errors []error
 
+	_CreateRequest_Usernames_Unique := make(map[string]struct{}, len(m.GetUsernames()))
+
 	for idx, item := range m.GetUsernames() {
 		_, _ = idx, item
+
+		if _, exists := _CreateRequest_Usernames_Unique[item]; exists {
+			err := CreateRequestValidationError{
+				field:  fmt.Sprintf("Usernames[%v]", idx),
+				reason: "repeated value must contain unique items",
+			}
+			if !all {
+				return err
+			}
+			errors = append(errors, err)
+		} else {
+			_CreateRequest_Usernames_Unique[item] = struct{}{}
+		}
 
 		if l := utf8.RuneCountInString(item); l < 3 || l > 20 {
 			err := CreateRequestValidationError{

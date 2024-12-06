@@ -1,6 +1,7 @@
 package env
 
 import (
+	"errors"
 	"fmt"
 	"github.com/t1pcrips/chat-service/internal/config"
 	"os"
@@ -24,22 +25,22 @@ func NewPgCfgSearcher() *PgCfgSearcher {
 func (s *PgCfgSearcher) Get() (*config.PgConfig, error) {
 	dbHost := os.Getenv(hostPg)
 	if dbHost == "" {
-		return nil, fmt.Errorf("dbHost not found")
+		return nil, errors.New("dbHost not found")
 	}
 
 	dbPortStr := os.Getenv(portPg)
 	if dbPortStr == "" {
-		return nil, fmt.Errorf("dbPort not found")
+		return nil, errors.New("dbPort not found")
 	}
 
 	dbPort, err := strconv.Atoi(dbPortStr)
 	if err != nil {
-		return nil, fmt.Errorf("faild to convert dbPort to integer")
+		return nil, errors.New("faild to convert dbPort to integer")
 	}
 
 	dbName := os.Getenv(name)
 	if dbName == "" {
-		return nil, fmt.Errorf("dbName not found")
+		return nil, errors.New("dbName not found")
 	}
 
 	dbUser := os.Getenv(user)

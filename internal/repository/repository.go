@@ -1,8 +1,8 @@
 package repository
 
 import (
-	"chat-server/internal/model"
 	"context"
+	"github.com/t1pcrips/chat-service/internal/model"
 )
 
 type ChatRepository interface {

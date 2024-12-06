@@ -16,6 +16,10 @@ type GRPCConfigSearcher interface {
 	Get() (*GRPCConfig, error)
 }
 
+type HTTPConfigSearcher interface {
+	Get() (*HTTPConfig, error)
+}
+
 type LogConfigSearcher interface {
 	Get() (*LogConfig, error)
 }
@@ -33,6 +37,11 @@ type GRPCConfig struct {
 	Port string
 }
 
+type HTTPConfig struct {
+	Host string
+	Port string
+}
+
 type LogConfig struct {
 	LogLevel      zerolog.Level
 	LogTimeFormat string
@@ -43,6 +52,10 @@ func (cfg *PgConfig) DSN() string {
 }
 
 func (cfg *GRPCConfig) Address() string {
+	return net.JoinHostPort(cfg.Host, cfg.Port)
+}
+
+func (cfg *HTTPConfig) Address() string {
 	return net.JoinHostPort(cfg.Host, cfg.Port)
 }
 

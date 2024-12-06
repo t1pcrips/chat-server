@@ -1,10 +1,10 @@
 package member_model
 
 type CreateMemberRequest struct {
-	ChatId    int64    `db:"chat_id"`
-	Usernames []string `db:"usernames"`
+	ChatId    int64
+	Usernames []string
 }
 
 type Username struct {
-	Username string `db:"username"`
+	Username string
 }

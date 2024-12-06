@@ -1,7 +1,7 @@
 package env
 
 import (
-	"fmt"
+	"errors"
 	"github.com/rs/zerolog"
 	"github.com/t1pcrips/chat-service/internal/config"
 	"os"
@@ -22,17 +22,17 @@ const (
 func (s *LogCfSearcher) Get() (*config.LogConfig, error) {
 	levelStr := os.Getenv(logLevel)
 	if levelStr == "" {
-		return nil, fmt.Errorf("logLevel not found")
+		return nil, errors.New("logLevel not found")
 	}
 
 	level, err := strconv.Atoi(levelStr)
 	if err != nil {
-		return nil, fmt.Errorf("failed to conver level to int: %w", err)
+		return nil, errors.New("failed to conver level to int")
 	}
 
 	timeFormat := os.Getenv(logTimeFormat)
 	if timeFormat == "" {
-		return nil, fmt.Errorf("timeFormat not found")
+		return nil, errors.New("timeFormat not found")
 	}
 
 	return &config.LogConfig{

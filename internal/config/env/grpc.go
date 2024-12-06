@@ -1,7 +1,7 @@
 package env
 
 import (
-	"fmt"
+	"errors"
 	"github.com/t1pcrips/chat-service/internal/config"
 	"os"
 )
@@ -20,12 +20,12 @@ func NewGRPCCfgSearcher() *GRPCCfgSearcher {
 func (s *GRPCCfgSearcher) Get() (*config.GRPCConfig, error) {
 	host := os.Getenv(hostGRPC)
 	if host == "" {
-		return nil, fmt.Errorf("gRPC Host not found")
+		return nil, errors.New("gRPC Host not found")
 	}
 
 	port := os.Getenv(portGRPC)
 	if port == "" {
-		return nil, fmt.Errorf("gRPC Port not found")
+		return nil, errors.New("gRPC Port not found")
 	}
 
 	return &config.GRPCConfig{

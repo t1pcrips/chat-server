@@ -1,21 +1,38 @@
 syntax = "proto3";
 
-package v1;
+package chat_v1;
 
 import "google/protobuf/empty.proto";
 import "google/protobuf/timestamp.proto";
 import "validate/validate.proto";
+import "google/api/annotations.proto";
 
 option go_package = "github.com/t1pcrips/chat-service/pkg/chat_v1;chat_v1";
 
 service Chat {
-  rpc Create(CreateRequest) returns (CreateResponse);
-  rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
-  rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty);
+  rpc Create(CreateRequest) returns (CreateResponse) {
+    option (google.api.http) = {
+      post: "/chat/v1"
+      body: "*"
+    };
+  }
+
+  rpc Delete(DeleteRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      delete: "/chat/v1"
+    };
+  }
+
+  rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/chat/v1/send-message"
+      body: "*"
+    };
+  }
 }
 
 message CreateRequest {
-  repeated string usernames = 1 [(validate.rules).repeated.items.string = {min_len:3, max_len:20}];
+  repeated string usernames = 1 [(validate.rules).repeated = {unique: true, items: {string: {min_len:3, max_len:20}}}];
 }
 
 message CreateResponse {
