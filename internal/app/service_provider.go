@@ -19,9 +19,10 @@ import (
 )
 
 type serviceProvider struct {
-	pgConfig   *config.PgConfig
-	grpcConfig *config.GRPCConfig
-	httpConfig *config.HTTPConfig
+	pgConfig      *config.PgConfig
+	grpcConfig    *config.GRPCConfig
+	httpConfig    *config.HTTPConfig
+	swaggerConfig *config.SWAGGERConfig
 
 	dbClient  database.Client
 	txManeger database.TxManeger
@@ -40,7 +41,7 @@ func newServiceProvider() *serviceProvider {
 
 func (s *serviceProvider) PGConfig() *config.PgConfig {
 	if s.pgConfig == nil {
-		cfgSearcher := env.NewPgCfgSearcher()
+		cfgSearcher := env.NewPgConfigSearcher()
 
 		cfg, err := cfgSearcher.Get()
 		if err != nil {
@@ -55,7 +56,7 @@ func (s *serviceProvider) PGConfig() *config.PgConfig {
 
 func (s *serviceProvider) GRPCConfig() *config.GRPCConfig {
 	if s.grpcConfig == nil {
-		cfgSearcher := env.NewGRPCCfgSearcher()
+		cfgSearcher := env.NewGRPCConfigSearcher()
 
 		cfg, err := cfgSearcher.Get()
 		if err != nil {
@@ -70,7 +71,7 @@ func (s *serviceProvider) GRPCConfig() *config.GRPCConfig {
 
 func (s *serviceProvider) HTTPConfig() *config.HTTPConfig {
 	if s.httpConfig == nil {
-		cfgSearcher := env.NewHTTPCfgSearcher()
+		cfgSearcher := env.NewHTTPConfigSearcher()
 
 		cfg, err := cfgSearcher.Get()
 		if err != nil {
@@ -81,6 +82,21 @@ func (s *serviceProvider) HTTPConfig() *config.HTTPConfig {
 	}
 
 	return s.httpConfig
+}
+
+func (s *serviceProvider) SWAGGERConfig() *config.SWAGGERConfig {
+	if s.swaggerConfig == nil {
+		cfgSearcher := env.NewSwaggerConfigSearcher()
+
+		cfg, err := cfgSearcher.Get()
+		if err != nil {
+			log.Fatalf("failed to get swagger config: %s", err.Error())
+		}
+
+		s.swaggerConfig = cfg
+	}
+
+	return s.swaggerConfig
 }
 
 func (s *serviceProvider) DBClient(ctx context.Context) database.Client {

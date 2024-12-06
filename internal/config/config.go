@@ -8,22 +8,6 @@ import (
 	"os"
 )
 
-type PgConfigSearcher interface {
-	Get() (*PgConfig, error)
-}
-
-type GRPCConfigSearcher interface {
-	Get() (*GRPCConfig, error)
-}
-
-type HTTPConfigSearcher interface {
-	Get() (*HTTPConfig, error)
-}
-
-type LogConfigSearcher interface {
-	Get() (*LogConfig, error)
-}
-
 type PgConfig struct {
 	Port     int
 	Host     string
@@ -42,6 +26,11 @@ type HTTPConfig struct {
 	Port string
 }
 
+type SWAGGERConfig struct {
+	Host string
+	Port string
+}
+
 type LogConfig struct {
 	LogLevel      zerolog.Level
 	LogTimeFormat string
@@ -56,6 +45,10 @@ func (cfg *GRPCConfig) Address() string {
 }
 
 func (cfg *HTTPConfig) Address() string {
+	return net.JoinHostPort(cfg.Host, cfg.Port)
+}
+
+func (cfg *SWAGGERConfig) Address() string {
 	return net.JoinHostPort(cfg.Host, cfg.Port)
 }
 
