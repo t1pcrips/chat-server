@@ -4,3 +4,4 @@ local.env
 prod.env
 todo.md/coverage.out
 /coverage.out
+vendor.protogen

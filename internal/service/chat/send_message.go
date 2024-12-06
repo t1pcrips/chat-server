@@ -2,7 +2,6 @@ package chat
 
 import (
 	"context"
-	"fmt"
 	"github.com/t1pcrips/chat-service/internal/model"
 	"github.com/t1pcrips/chat-service/pkg/errs"
 )
@@ -34,6 +33,6 @@ func (s *ChatServiceImpl) SendMessage(ctx context.Context, info *model.CreateMes
 	if err != nil {
 		return err
 	}
-	fmt.Println("yes")
+
 	return nil
 }
