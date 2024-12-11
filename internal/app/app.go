@@ -113,6 +113,7 @@ func (a *App) initGRPCServer(ctx context.Context) error {
 		grpc.ChainUnaryInterceptor(
 			interceptor.ValidateInterceptor,
 			interceptor.TimestampInterceptor,
+			a.serviceProvider.AccessInterceptor(ctx).Check,
 		),
 	)
 	reflection.Register(a.grpcServer)

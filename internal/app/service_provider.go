@@ -3,8 +3,11 @@ package app
 import (
 	"context"
 	"github.com/t1pcrips/chat-service/internal/api/chat"
+	"github.com/t1pcrips/chat-service/internal/client"
+	"github.com/t1pcrips/chat-service/internal/client/access"
 	"github.com/t1pcrips/chat-service/internal/config"
 	"github.com/t1pcrips/chat-service/internal/config/env"
+	"github.com/t1pcrips/chat-service/internal/interceptor"
 	"github.com/t1pcrips/chat-service/internal/repository"
 	chatRepository "github.com/t1pcrips/chat-service/internal/repository/chat"
 	"github.com/t1pcrips/chat-service/internal/repository/chat_members"
@@ -19,10 +22,11 @@ import (
 )
 
 type serviceProvider struct {
-	pgConfig      *config.PgConfig
-	grpcConfig    *config.GRPCConfig
-	httpConfig    *config.HTTPConfig
-	swaggerConfig *config.SWAGGERConfig
+	pgConfig          *config.PgConfig
+	grpcConfig        *config.GRPCConfig
+	httpConfig        *config.HTTPConfig
+	swaggerConfig     *config.SWAGGERConfig
+	accessInterceptor *interceptor.AccessInterceptor
 
 	dbClient  database.Client
 	txManeger database.TxManeger
@@ -31,8 +35,11 @@ type serviceProvider struct {
 	messageRepository repository.MessageRepository
 	membersRepository repository.MembersRepository
 
-	chatService service.ChatService
-	chatImpl    *chat.ChatApiImpl
+	accessInterseptor interceptor.AccessInterceptor
+
+	accessClient client.AccessClient
+	chatService  service.ChatService
+	chatImpl     *chat.ChatApiImpl
 }
 
 func newServiceProvider() *serviceProvider {
@@ -97,6 +104,14 @@ func (s *serviceProvider) SWAGGERConfig() *config.SWAGGERConfig {
 	}
 
 	return s.swaggerConfig
+}
+
+func (s *serviceProvider) AccessInterceptor(ctx context.Context) *interceptor.AccessInterceptor {
+	if s.accessInterceptor == nil {
+		s.accessInterceptor = interceptor.NewAccessInterceptor(s.AccessClient(ctx))
+	}
+
+	return s.accessInterceptor
 }
 
 func (s *serviceProvider) DBClient(ctx context.Context) database.Client {
@@ -168,4 +183,12 @@ func (s *serviceProvider) ChatImpl(ctx context.Context) *chat.ChatApiImpl {
 	}
 
 	return s.chatImpl
+}
+
+func (s *serviceProvider) AccessClient(ctx context.Context) client.AccessClient {
+	if s.accessClient == nil {
+		s.accessClient = access.NewAccessClientImpl()
+	}
+
+	return s.accessClient
 }
