@@ -46,6 +46,13 @@ service Chat {
       body: "*"
     };
   }
+
+  rpc Connect(ConnectChatRequest) returns (stream Message) {
+    option (google.api.http) = {
+      post: '/chat/v1/chat-connect'
+      body: "*"
+    };
+  }
 }
 
 message CreateRequest {
@@ -61,6 +68,19 @@ message DeleteRequest {
 }
 
 message SendMessageRequest {
+  string from = 1 [(validate.rules).string = {min_len:3, max_len:20}];
+  string text = 2 [(validate.rules).string = {min_len:1, max_len:1000}];
+  google.protobuf.Timestamp timestamp = 3;
+  int64 toChatId = 4 [(validate.rules).int64.gt = 0];
+}
+
+message ConnectChatRequest {
+  int64 chat_id = 1;
+  int64 user_id = 2;
+  string username = 3;
+}
+
+message Message {
   string from = 1 [(validate.rules).string = {min_len:3, max_len:20}];
   string text = 2 [(validate.rules).string = {min_len:1, max_len:1000}];
   google.protobuf.Timestamp timestamp = 3;

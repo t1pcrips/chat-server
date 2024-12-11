@@ -24,7 +24,7 @@ get-deps:
 	go get -u google.golang.org/protobuf/cmd/protoc-gen-go
 	go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
-generation-protoc:
+generation-protoc-chat:
 	mkdir -p $(CURDIR)/pkg/swagger
 	mkdir -p $(CURDIR)/pkg/chat_v1
 	protoc --proto_path grpc/chat_v1 --proto_path vendor.protogen \
@@ -42,6 +42,20 @@ generation-protoc:
           	--plugin=protoc-gen-openapiv2=bin/protoc-gen-openapiv2 \
             --plugin=protoc-gen-openapiv2=bin/protoc-gen-openapiv2 \
             grpc/chat_v1/chat.proto
+
+generation-protoc-access:
+	mkdir -p pkg/access_v1
+	protoc --proto_path grpc/access_v1  --proto_path vendor.protogen \
+            --go_out=pkg/access_v1 --go_opt=paths=source_relative \
+            --plugin=protoc-gen-go=bin/protoc-gen-go \
+            --go-grpc_out=pkg/access_v1 --go-grpc_opt=paths=source_relative \
+            --plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
+            --validate_out=lang=go:pkg/access_v1 --validate_opt=paths=source_relative \
+            --plugin=protoc-gen-validate=bin/protoc-gen-validate \
+            --grpc-gateway_out=pkg/access_v1 --grpc-gateway_opt=paths=source_relative \
+            --plugin=protoc-gen-grpc-gateway=bin/protoc-gen-grpc-gateway \
+			grpc/access_v1/access.proto
+
 
 generate-statik:
 	$(LOCAL_BIN)/statik -src=pkg/swagger -include='*.css,*.html,*.js,*.json,*.png'
