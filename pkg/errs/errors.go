@@ -28,4 +28,5 @@ var (
 	ErrDeleteUser        = errors.New("failed to delete user")
 	ErrGetUser           = errors.New("failed to get user")
 	ErrUpdateUser        = errors.New("failed to update user")
+	ErrChatChanel        = errors.New("failed to get chanel for chat")
 )

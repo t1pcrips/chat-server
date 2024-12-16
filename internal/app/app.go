@@ -7,7 +7,7 @@ import (
 	"github.com/rs/cors"
 	"github.com/t1pcrips/chat-service/internal/config"
 	"github.com/t1pcrips/chat-service/internal/interceptor"
-	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
+	"github.com/t1pcrips/chat-service/pkg/chat_v1"
 	_ "github.com/t1pcrips/chat-service/statik"
 	"github.com/t1pcrips/platform-pkg/pkg/closer"
 	"google.golang.org/grpc"
@@ -116,8 +116,9 @@ func (a *App) initGRPCServer(ctx context.Context) error {
 			a.serviceProvider.AccessInterceptor(ctx).Check,
 		),
 	)
+
 	reflection.Register(a.grpcServer)
-	desc.RegisterChatServer(a.grpcServer, a.serviceProvider.ChatImpl(ctx))
+	chat_v1.RegisterChatServer(a.grpcServer, a.serviceProvider.ChatImpl(ctx))
 
 	return nil
 }
@@ -129,7 +130,7 @@ func (a *App) initHTTPServer(ctx context.Context) error {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	}
 
-	err := desc.RegisterChatHandlerFromEndpoint(ctx, mux, a.serviceProvider.GRPCConfig().Address(), opts)
+	err := chat_v1.RegisterChatHandlerFromEndpoint(ctx, mux, a.serviceProvider.GRPCConfig().Address(), opts)
 	if err != nil {
 		return err
 	}

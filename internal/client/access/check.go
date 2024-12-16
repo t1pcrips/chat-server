@@ -10,15 +10,16 @@ type AccessClientImpl struct {
 	client access_v1.AccessClient
 }
 
-func NewAccessClientImpl() client.AccessClient {
-	return &AccessClientImpl{}
+func NewAccessClientImpl(client access_v1.AccessClient) client.AccessClient {
+	return &AccessClientImpl{
+		client: client,
+	}
 }
 
 func (c *AccessClientImpl) Check(ctx context.Context, address string) error {
 	_, err := c.client.Check(ctx, &access_v1.CheckRequest{
 		Address: address,
 	})
-
 	if err != nil {
 		return err
 	}

@@ -2,11 +2,11 @@ package chat
 
 import (
 	"github.com/t1pcrips/chat-service/internal/service"
-	desc "github.com/t1pcrips/chat-service/pkg/chat_v1"
+	"github.com/t1pcrips/chat-service/pkg/chat_v1"
 )
 
 type ChatApiImpl struct {
-	desc.UnimplementedChatServer
+	chat_v1.UnimplementedChatServer
 	service service.ChatService
 }
 

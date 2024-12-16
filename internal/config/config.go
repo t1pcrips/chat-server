@@ -36,6 +36,11 @@ type LogConfig struct {
 	LogTimeFormat string
 }
 
+type AuthConfig struct {
+	Host string
+	Port string
+}
+
 func (cfg *PgConfig) DSN() string {
 	return fmt.Sprintf("postgres://%s:%s@%s:%d/%s", cfg.User, cfg.Password, cfg.Host, cfg.Port, cfg.Name)
 }
@@ -49,6 +54,10 @@ func (cfg *HTTPConfig) Address() string {
 }
 
 func (cfg *SWAGGERConfig) Address() string {
+	return net.JoinHostPort(cfg.Host, cfg.Port)
+}
+
+func (cfg *AuthConfig) Address() string {
 	return net.JoinHostPort(cfg.Host, cfg.Port)
 }
 

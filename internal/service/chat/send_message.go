@@ -16,13 +16,13 @@ func (s *ChatServiceImpl) SendMessage(ctx context.Context, info *model.CreateMes
 			return errs.ErrChatNotFound
 		}
 
-		existsMember, txErrMember := s.memberRepository.CheckMemberExists(ctx, info.From)
-		if txErrMember != nil {
-			return txErrMember
-		}
-		if !existsMember {
-			return errs.ErrMemberNotFound
-		}
+		//existsMember, txErrMember := s.memberRepository.CheckMemberExists(ctx, info.From)
+		//if txErrMember = nil {
+		//	return txErrMember
+		//}
+		//if !existsMember {
+		//	return errs.ErrMemberNotFound
+		//}
 
 		txErr := s.messageRepository.CreateMessage(ctx, info)
 		if txErr != nil {
@@ -34,5 +34,9 @@ func (s *ChatServiceImpl) SendMessage(ctx context.Context, info *model.CreateMes
 		return err
 	}
 
-	return nil
+	return s.chatsMessageChannels.SendMessageForChat(info.ChatId, &model.Message{
+		ChatId: info.ChatId,
+		From:   info.From,
+		Text:   info.Text,
+	})
 }

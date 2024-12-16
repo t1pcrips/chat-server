@@ -9,7 +9,7 @@ import (
 )
 
 func (i *ChatApiImpl) Create(ctx context.Context, req *desc.CreateRequest) (*desc.CreateResponse, error) {
-	chatId, err := i.service.Create(ctx, converter.ConvertToCreateRequestFromDesc(req.GetUsernames()))
+	chatId, err := i.service.Create(ctx, converter.ToCreateRequestFromApi(req.GetUsernames()))
 	if err != nil {
 		return nil, status.Error(codes.NotFound, err.Error())
 	}

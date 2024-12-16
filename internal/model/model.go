@@ -19,5 +19,12 @@ type CreateChatRequest struct {
 }
 
 type User struct {
+	ChatId   int64
 	Username string
+}
+
+type Message struct {
+	ChatId int64
+	From   string
+	Text   string
 }

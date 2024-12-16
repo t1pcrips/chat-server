@@ -10,7 +10,7 @@ import (
 )
 
 func (i *ChatApiImpl) SendMessage(ctx context.Context, req *desc.SendMessageRequest) (*emptypb.Empty, error) {
-	err := i.service.SendMessage(ctx, converter.ToMessageFromDeps(req))
+	err := i.service.SendMessage(ctx, converter.ToMessageFromSendApi(req))
 	if err != nil {
 		return nil, status.Error(codes.NotFound, err.Error())
 	}

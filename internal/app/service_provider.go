@@ -14,10 +14,14 @@ import (
 	"github.com/t1pcrips/chat-service/internal/repository/messages"
 	"github.com/t1pcrips/chat-service/internal/service"
 	chatService "github.com/t1pcrips/chat-service/internal/service/chat"
+	"github.com/t1pcrips/chat-service/internal/service/chat/streams"
+	"github.com/t1pcrips/chat-service/pkg/access_v1"
 	"github.com/t1pcrips/platform-pkg/pkg/closer"
 	"github.com/t1pcrips/platform-pkg/pkg/database"
 	"github.com/t1pcrips/platform-pkg/pkg/database/postgres"
 	"github.com/t1pcrips/platform-pkg/pkg/database/transaction"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 )
 
@@ -25,6 +29,7 @@ type serviceProvider struct {
 	pgConfig          *config.PgConfig
 	grpcConfig        *config.GRPCConfig
 	httpConfig        *config.HTTPConfig
+	authConfig        *config.AuthConfig
 	swaggerConfig     *config.SWAGGERConfig
 	accessInterceptor *interceptor.AccessInterceptor
 
@@ -37,9 +42,13 @@ type serviceProvider struct {
 
 	accessInterseptor interceptor.AccessInterceptor
 
-	accessClient client.AccessClient
-	chatService  service.ChatService
-	chatImpl     *chat.ChatApiImpl
+	chats                *streams.Chats
+	chatsMessageChannels *streams.ChatMessageChannels
+
+	accessClient   client.AccessClient
+	accessV1Client access_v1.AccessClient
+	chatService    service.ChatService
+	chatImpl       *chat.ChatApiImpl
 }
 
 func newServiceProvider() *serviceProvider {
@@ -106,6 +115,21 @@ func (s *serviceProvider) SWAGGERConfig() *config.SWAGGERConfig {
 	return s.swaggerConfig
 }
 
+func (s *serviceProvider) AUTHConfig() *config.AuthConfig {
+	if s.authConfig == nil {
+		cfgSearcher := env.NewAuthConfigSearcher()
+
+		cfg, err := cfgSearcher.Get()
+		if err != nil {
+			return nil
+		}
+
+		s.authConfig = cfg
+	}
+
+	return s.authConfig
+}
+
 func (s *serviceProvider) AccessInterceptor(ctx context.Context) *interceptor.AccessInterceptor {
 	if s.accessInterceptor == nil {
 		s.accessInterceptor = interceptor.NewAccessInterceptor(s.AccessClient(ctx))
@@ -131,6 +155,22 @@ func (s *serviceProvider) DBClient(ctx context.Context) database.Client {
 		s.dbClient = dbc
 	}
 	return s.dbClient
+}
+
+func (s *serviceProvider) AccessV1Client(ctx context.Context) access_v1.AccessClient {
+	if s.accessV1Client == nil {
+		conn, err := grpc.NewClient(
+			s.AUTHConfig().Address(),
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
+		if err != nil {
+			log.Fatalf("failed to connect to auth service: %s", err.Error())
+		}
+
+		s.accessV1Client = access_v1.NewAccessClient(conn)
+	}
+
+	return s.accessV1Client
 }
 
 func (s *serviceProvider) TxManeger(ctx context.Context) database.TxManeger {
@@ -171,7 +211,10 @@ func (s *serviceProvider) ChatService(ctx context.Context) service.ChatService {
 			s.ChatRepository(ctx),
 			s.MemberRepository(ctx),
 			s.MessageRepository(ctx),
-			s.TxManeger(ctx))
+			s.TxManeger(ctx),
+			s.Chats(),
+			s.ChatsMessageChannels(),
+		)
 	}
 
 	return s.chatService
@@ -187,8 +230,24 @@ func (s *serviceProvider) ChatImpl(ctx context.Context) *chat.ChatApiImpl {
 
 func (s *serviceProvider) AccessClient(ctx context.Context) client.AccessClient {
 	if s.accessClient == nil {
-		s.accessClient = access.NewAccessClientImpl()
+
+		s.accessClient = access.NewAccessClientImpl(s.AccessV1Client(ctx))
+	}
+	return s.accessClient
+}
+
+func (s *serviceProvider) ChatsMessageChannels() *streams.ChatMessageChannels {
+	if s.chatsMessageChannels == nil {
+		s.chatsMessageChannels = streams.NewChatMessageChannels()
 	}
 
-	return s.accessClient
+	return s.chatsMessageChannels
+}
+
+func (s *serviceProvider) Chats() *streams.Chats {
+	if s.chats == nil {
+		s.chats = streams.NewChats()
+	}
+
+	return s.chats
 }

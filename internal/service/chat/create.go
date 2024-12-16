@@ -33,5 +33,7 @@ func (s *ChatServiceImpl) Create(ctx context.Context, info *model.CreateChatRequ
 		return 0, err
 	}
 
+	s.chatsMessageChannels.InitChannelForChat(chatId, 100)
+
 	return chatId, nil
 }

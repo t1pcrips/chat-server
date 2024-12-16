@@ -3,7 +3,6 @@ package interceptor
 import (
 	"context"
 	"errors"
-	"fmt"
 	"github.com/t1pcrips/chat-service/internal/client"
 	"github.com/t1pcrips/chat-service/internal/utils"
 	"google.golang.org/grpc"
@@ -25,7 +24,6 @@ func (i *AccessInterceptor) Check(ctx context.Context, req interface{}, info *gr
 		return nil, err
 	}
 
-	fmt.Println(info.FullMethod)
 	err = i.client.Check(outgoingCtx, info.FullMethod)
 	if err != nil {
 		return nil, errors.New("access denied")
